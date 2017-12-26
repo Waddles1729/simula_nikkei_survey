@@ -14,21 +14,20 @@ while line:
 
 f.close()
 
-correct_all_url = all_url[:len(all_url)-2]
+correct_all_url = all_url[:len(all_url)-1]
 for url in correct_all_url:
 
     html = requests.get(url.replace('\n', ''))
     soup = BeautifulSoup(html.text, 'html.parser')
-    div_entryBody = soup.find('div', class_="entryBody")
-    all_p = div_entryBody.find_all('p')
-    for p in all_p:
+    ps = soup.find_all('p')
+
+    for p in ps:
         pre_p_text = re.sub(r'\u3000', '', p.text)
         p_text = re.sub(r'\n', '', pre_p_text)
         if len(p_text) >= 40:
             if '。' in p_text:
                 all_p_text.append(p_text)
-        else:
-            pass
+
 
 with open('p_data.txt', 'w') as file:
     for p in all_p_text:
